@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Persoon</title>
+		<script src="https://unpkg.com/vue@next"></script>
+	</head>
+
+	<body>
+		<div id="app">
+			<input v-model="persoon" v-on:keyup.enter="addPersoon" />
+			<button v-on:click="addPersoon()">Voeg toe</button>
+			<div>
+				<p v-for="persoon in personen">{{ persoon }}</p>
+			</div>
+		</div>
+
+		<script>
+			const app = {
+				data: function () {
+					return {
+						personen: [],
+						persoon: "",
+					};
+				},
+				methods: {
+					addPersoon: function () {
+						this.personen.push(this.persoon);
+						this.persoon = "";
+					},
+				},
+			};
+
+			Vue.createApp(app).mount("#app");
+		</script>
+	</body>
+</html>

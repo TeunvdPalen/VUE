@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>v-on</title>
+		<script src="https://unpkg.com/vue@next"></script>
+	</head>
+
+	<body>
+		<div id="app">
+			<input v-model="newColor" v-on:keyup.enter="addNewColor" />
+			<button v-on:click="addNewColor()">Voeg toe</button>
+			<ul>
+				<li v-for="kleur in kleuren">{{ kleur }}</li>
+			</ul>
+		</div>
+
+		<script>
+			const app = {
+				data: function () {
+					return {
+						kleuren: [],
+						newColor: "",
+					};
+				}, // voeg een komma toe en een methods object
+				methods: {
+					addNewColor: function () {
+						this.kleuren.push(this.newColor);
+						// wil je aan elementen uit het data object, kan je dat via this, dus je hoeft data niet te vermelden
+						this.newColor = "";
+					},
+				},
+			};
+
+			Vue.createApp(app).mount("#app");
+		</script>
+	</body>
+</html>
