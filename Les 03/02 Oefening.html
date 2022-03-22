@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Template</title>
+		<script src="https://unpkg.com/vue@next"></script>
+		<style>
+			main {
+				width: 80%;
+				margin: 1rem 5rem 1rem 1rem;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<main>
+				<h1>Sticky side</h1>
+				<p>
+					Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem assumenda repudiandae suscipit esse quia,
+					architecto quibusdam dolorem in dignissimos dolores harum labore voluptate dicta, aut veniam quidem quis
+					ducimus tempore, voluptates fuga tempora? Maxime fugiat nisi repellendus, corrupti alias voluptatum numquam
+					culpa magni non quibusdam possimus vero consequuntur sequi ab.
+				</p>
+				<p>
+					Fuga ab iure voluptatum quod tempora eos porro quasi nihil deserunt unde sit modi possimus est cum, voluptate
+					sint esse et minima rerum eligendi, saepe animi qui. Libero magni ipsum rerum praesentium, maiores excepturi
+					harum alias quod quisquam dolore. Blanditiis iure tenetur eum harum deleniti laboriosam, debitis provident
+					quam nam?
+				</p>
+				<p>
+					Amet ad a libero veritatis eaque, ipsa expedita. Aspernatur facere vel architecto delectus porro nihil
+					deleniti maxime ex officia debitis nostrum reprehenderit itaque consectetur aperiam corporis pariatur quasi,
+					eaque possimus modi quis assumenda dolores explicabo. Fugit, possimus et sequi amet corporis asperiores, at
+					molestiae rerum voluptatem eveniet aliquam quam soluta.
+				</p>
+				<p>
+					Dolore fugiat repellendus doloremque mollitia ut quidem hic cumque facilis sunt possimus iusto autem ratione
+					qui aut commodi praesentium placeat voluptatem reprehenderit repellat magni ipsum quia, soluta suscipit. Atque
+					labore excepturi asperiores omnis, ipsum voluptas velit deleniti. Placeat, cupiditate. Harum fuga
+					exercitationem cumque mollitia omnis aperiam dicta repudiandae molestiae nisi?
+				</p>
+				<p>
+					Repellendus, deserunt. Similique quae eius repellat nihil sequi quos recusandae suscipit odio assumenda
+					officia a obcaecati veritatis necessitatibus, voluptate hic! Ab, consequatur obcaecati maiores quam ipsa ut
+					architecto suscipit expedita provident sapiente neque totam asperiores, quidem soluta temporibus. Accusamus
+					quo tempore facilis fugit quibusdam laudantium hic consequatur reiciendis voluptatem beatae.
+				</p>
+				<p>
+					Eaque cumque voluptatum aut ratione animi nulla, unde amet accusamus molestiae quidem, corrupti a nisi, alias
+					ut quaerat quibusdam quasi deleniti quod expedita debitis nesciunt accusantium hic. Laborum tempore esse modi
+					excepturi? Aspernatur quibusdam incidunt nihil tempore unde distinctio quos dolore id provident similique,
+					suscipit culpa voluptate ullam consectetur atque.
+				</p>
+			</main>
+			<aside v-sticky="200">
+				<p>Schrijf je in voor de niewsbrief</p>
+				<label>Email: <input type="text" v-model="email" /></label>
+			</aside>
+		</div>
+
+		<script>
+			const app = Vue.createApp({
+				data: function () {
+					return {
+						email: "",
+					};
+				},
+			});
+			app.directive("sticky", {
+				mounted: function (el, binding) {
+					el.style.position = "fixed";
+					el.style.top = binding.value + "px";
+					el.style.right = "4rem";
+				},
+			});
+
+			app.mount("#app");
+		</script>
+	</body>
+</html>

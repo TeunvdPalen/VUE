@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Template</title>
+		<script src="https://unpkg.com/vue@next"></script>
+	</head>
+
+	<body>
+		<div id="app">
+			<div class="singelselect">
+				<select v-model="selected">
+					<option disabled value="">Selecteer aub.</option>
+					<option value="optieA">A</option>
+					<option value="optieB">B</option>
+					<option value="optieC">C</option>
+				</select>
+				<span>Selected: {{ selected }}</span>
+			</div>
+			<hr />
+			<div class="multiselect">
+				<select v-model="multipleSelected" multiple>
+					<option disabled value="">Selecteer aub.</option>
+					<option value="optieA">A</option>
+					<option value="optieB">B</option>
+					<option value="optieC">C</option>
+				</select>
+				<br />
+				<span>Selected: {{ multipleSelected }}</span>
+			</div>
+		</div>
+
+		<script>
+			const app = {
+				data: function () {
+					return {
+						selected: "",
+						multipleSelected: [],
+					};
+				},
+			};
+
+			Vue.createApp(app).mount("#app");
+		</script>
+	</body>
+</html>

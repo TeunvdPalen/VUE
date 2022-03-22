@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Template</title>
+		<script src="https://unpkg.com/vue@next"></script>
+		<style>
+			.error {
+				color: red;
+				font-size: 1.3rem;
+			}
+			.succes {
+				color: green;
+				font-size: 1.3rem;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<div v-show="false" v-popup>
+				<h1>Niewsbrief</h1>
+				<p>
+					<label for="voornaam">Voornaam</label>
+					<input type="text" name="voornaam" id="voornaam" v-model="voornaam" />
+				</p>
+				<p>
+					<label for="achternaam">Achternaam</label>
+					<input type="text" name="achternaam" id="achternaam" v-model="achternaam" />
+				</p>
+				<p>
+					<label for="email">Email</label>
+					<input type="text" name="email" id="email" v-model="email" />
+				</p>
+				<p>
+					Ik aboneer mij op de volgende nieuwsbrieven <br />
+					<label><input type="checkbox" id="mobiele_technology" value="Mobiele technology" v-model="checkNieuws" />Mobiele technology</label>
+					<label><input type="checkbox" id="PS_games" value="PS games" v-model="checkNieuws" />PS games</label>
+					<label><input type="checkbox" id="webdesign" value="Webdesign" v-model="checkNieuws" />Webdesign</label>
+				</p>
+				<p>
+					<label><input type="checkbox" id="gdpr" v-model="gdpr" />Ik ga akkoord met het gebruik van mijn gegevens voor de registratie van mij account</label>
+				</p>
+				<button @click="verstuur()">Verstuur</button>
+				<br />
+				<span :class="{error: succes==false, succes: succes==true}" v-for="error in errors">{{ error }}<br /></span>
+			</div>
+		</div>
+
+		<script>
+			const app = Vue.createApp({
+				data: function () {
+					return {
+						voornaam: "",
+						achternaam: "",
+						email: "",
+						checkNieuws: [],
+						gdpr: "",
+						errors: [],
+						succes: false,
+					};
+				},
+				methods: {
+					verstuur: function () {
+						this.errors = [];
+						this.succes = false;
+						if (!this.voornaam) {
+							this.errors.push("Vul een voornaam in");
+						}
+						if (!this.achternaam) {
+							this.errors.push("Vul een achternaam in");
+						}
+						if (!this.email) {
+							this.errors.push("Vul een Email in");
+						}
+						if (this.checkNieuws.length == 0) {
+							this.errors.push("Geef minstens één keuze op");
+						}
+						if (!this.gdpr) {
+							this.errors.push("Ga akkoord met de GDPR voorwaarde om het formulier te kunnen verzenden");
+						}
+						if (this.voornaam && this.achternaam && this.email && this.checkNieuws.length > 0 && this.gdpr) {
+							this.errors = [];
+							this.errors.push("Uw aanmelding is verstuurd");
+							this.succes = true;
+						}
+					},
+				},
+			});
+			app.directive("popup", {
+				mounted: function (el) {
+					el.style.display = "block";
+				},
+			});
+			app.mount("#app");
+		</script>
+	</body>
+</html>

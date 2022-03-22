@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Template</title>
+		<script src="https://unpkg.com/vue@next"></script>
+		<style>
+			div {
+				margin: 2rem 1rem;
+			}
+			.geslacht input {
+				margin-right: 1.5rem;
+			}
+			.groen {
+				color: green;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<div class="naam">
+				<label> Voornaam: <input type="text" v-model="voornaam" /> </label>
+				<label> Achternaam: <input type="text" v-model="achternaam" /> </label>
+			</div>
+			<hr />
+			<div class="geslacht">
+				<label>Man:<input type="radio" id="man" value="man" v-model="geslacht" /> </label>
+				<label>Vrouw:<input type="radio" id="vrouw" value="vrouw" v-model="geslacht" /> </label>
+				<label>X:<input type="radio" id="x" value="x" v-model="geslacht" /> </label>
+			</div>
+			<hr />
+			<div class="multiselect">
+				<select v-model="multipleSelected" multiple>
+					<option disabled value="">Selecteer één of meerdere.</option>
+					<option value="verkoop">Verkoop</option>
+					<option value="aankoop">Aankoop</option>
+					<option value="wetgeving">Wetgeving</option>
+				</select>
+			</div>
+			<hr />
+			<div class="text">
+				<textarea
+					name="bericth"
+					id="bericth"
+					v-model="bericht"
+					placeholder="Type uw bericht hier."
+					cols="30"
+					rows="10"
+				></textarea>
+			</div>
+			<hr />
+			<div class="gdpr">
+				<label
+					><input type="checkbox" name="gdpr" id="gdpr" v-model="checkbox" /> Ik ga akkoord met het gebruik van mijn
+					gegevens voor de registratie van mijn account.</label
+				>
+			</div>
+			<div class="resultaat">
+				<p class="groen">{{ resultaat() }}</p>
+			</div>
+		</div>
+
+		<script>
+			const app = {
+				data: function () {
+					return {
+						voornaam: "",
+						achternaam: "",
+						geslacht: "",
+						multipleSelected: [],
+						bericht: "",
+						gdpr: false,
+					};
+				},
+				methods: {
+					resultaat: function () {
+						return (
+							"Ik ben " +
+							this.voornaam +
+							" " +
+							this.achternaam +
+							", Mijn geslacht is " +
+							this.geslacht +
+							". Ik heb interesse in: " +
+							this.multipleSelected +
+							". Mijn bericht, " +
+							this.boodschap +
+							". De gdpr = " +
+							this.gdpr
+						);
+					},
+				},
+			};
+
+			Vue.createApp(app).mount("#app");
+		</script>
+	</body>
+</html>

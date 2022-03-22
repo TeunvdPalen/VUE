@@ -10,7 +10,7 @@
 
 	<body>
 		<div id="app">
-			<input v-model="newColor" v-on:keyup.enter="addNewColor" />
+			<input v-model="newColor" v-on:keyup.enter="addNewColor()" />
 			<button v-on:click="addNewColor()">Voeg toe</button>
 			<ul>
 				<li v-for="kleur in kleuren">{{ kleur }}</li>
