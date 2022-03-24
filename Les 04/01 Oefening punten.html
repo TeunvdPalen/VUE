@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Punten</title>
+  <script src="https://unpkg.com/vue@next"></script>
+</head>
+
+<body>
+  <div id="app">
+    <div v-for="subject in results">
+      <p>punten voor {{ subject.name }}: {{ subject.punten }}</p>
+      <input v-model="subject.punten">
+    </div>
+    <p>Totaal: {{ totalpunten }}</p>
+    <p>Gemiddelde: {{gemiddelde}}</p>
+    <p>Uitslag: {{uitslag}}</p>
+  </div>
+
+  <script>
+    const app = {
+      data: function () {
+        return {
+          results: [{
+            name: 'Engels',
+            punten: 80
+          },
+          {
+            name: 'Nederlands',
+            punten: 85
+          },
+          {
+            name: 'Frans',
+            punten: 90
+          }
+          ]
+        }
+      },
+      computed: {
+        totalpunten: function () {
+          let total = 0;
+          for (let i = 0; i < this.results.length; i++) {
+            total += parseInt(this.results[i].punten);
+          }
+          return total;
+        },
+        gemiddelde: function () {
+          return this.totalpunten / this.results.length
+        },
+        uitslag: function () {
+          return (this.gemiddelde >= 50) ? "Geslaagd" : "Niet geslaagd"
+        }
+      }
+    };
+
+    Vue.createApp(app).mount("#app");
+  </script>
+</body>
+
+</html>

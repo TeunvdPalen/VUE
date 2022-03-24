@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>watcher</title>
+  <script src="https://unpkg.com/vue@next"></script>
+</head>
+
+<body>
+  <div id="app">
+    <p>Graden Celsius <input type="number" v-model="c"></p>
+    <span>Omgezet naar F: {{toF}}</span>
+    <p>Graden Fahrenheit<input type="number" v-model="f"></p>
+    <span>Omgezet naar C: {{toC}}</span>
+  </div>
+
+  <script>
+    const app = {
+      data: function () {
+        return {
+          c: "",
+          f: ""
+        }
+      },
+      watch: {
+        c() {
+          this.toF = this.c ? this.c * 1.8000 + 32.00 : 0
+        },
+        f() {
+          this.toC = this.f ? (this.f - 32) / 1.8000 : 0
+        }
+      }
+
+    }
+
+    Vue.createApp(app).mount('#app')
+  </script>
+</body>
+
+</html>
