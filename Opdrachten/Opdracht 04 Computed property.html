@@ -11,20 +11,56 @@
 
 <body>
   <div id="app">
-    <!--  -->
-  </div>
+    <div v-for="(cursist, i) in cursisten">
+      <h2>Naam: {{cursist.naam}}</h2>
+      <h3>Geslaagd</h3>
+      <div v-for="(vak,index) in cursist.resultaten">
+        <p v-if="beoordelingVakken[i][index] == 1">{{ vak[0]}}: {{ vak[1] }}</p>
+      </div>
+      <h3>Onvoldoende</h3>
+      <div v-for="(vak,index) in cursist.resultaten">
+        <p v-if="beoordelingVakken[i][index] == 0">{{ vak[0]}}: {{ vak[1] }}</p>
+      </div>
+      <hr>
+    </div>
+    <script>
+      const app = {
+        data: function () {
+          return {
+            cursisten: [
+              {
+                naam: 'Jan',
+                resultaten: [
+                  ['html', 40],
+                  ['JS', 80],
+                  ['JS-OOP', 70]
+                ]
+              },
+              {
+                naam: 'Piet',
+                resultaten: [
+                  ['html', 90],
+                  ['JS', 90],
+                  ['JS-OOP', 20]
+                ]
+              }
+            ]
 
-  <script>
-    const app = {
-      data: function () {
-        return {
-          //
-        };
-      },
-    };
+          };
+        },
+        computed: {
+          beoordelingVakken: function () {
+            return this.cursisten.map(cursist => {
+              return cursist.resultaten.map(vak => {
+                return vak[1] >= 50 ? 1 : 0
+              })
+            })
+          }
+        }
+      };
 
-    Vue.createApp(app).mount("#app");
-  </script>
+      Vue.createApp(app).mount("#app");
+    </script>
 </body>
 
 </html>
