@@ -1,167 +1,207 @@
 <!DOCTYPE html>
 <html>
+	<head>
+		<title></title>
+		<meta charset="utf-8" />
+		<style type="text/css">
+			body,
+			html {
+				font-family: verdana, sans-serif;
+				color: #666;
+				background-color: #f9f9f9;
+				margin: 0;
+			}
 
-<head>
-    <title></title>
-    <meta charset="utf-8">
-    <style type="text/css">
-        body,
-        html {
-            font-family: verdana, sans-serif;
-            color: #666;
-            background-color: #f9f9f9;
-            margin: 0;
-        }
+			header {
+				background: #770000;
+				padding: 20px 60px;
+				margin: 0;
+				color: #ffeedd;
+				border-bottom: 1px solid #ddd;
+			}
 
-        header {
-            background: #770000;
-            padding: 20px 60px;
-            margin: 0;
-            color: #ffeedd;
-            border-bottom: 1px solid #ddd;
-        }
+			h1 a {
+				text-decoration: none;
+				color: #ffeedd;
+			}
 
+			#cookies,
+			#inhoud {
+				padding: 20px 30px;
+			}
 
-        h1 a {
-            text-decoration: none;
-            color: #ffeedd;
-        }
+			#cookies {
+				background-color: orange;
+			}
 
-        #cookies,
-        #inhoud {
-            padding: 20px 30px;
-        }
+			#nieuwe-items {
+				display: flex-row;
+				justify-content: space-between;
+			}
 
-        #cookies {
-            background-color: orange
-        }
+			.item {
+				border: 2px solid #ccc;
+				width: 800px;
+				background-color: #fff;
+				text-align: right;
+				margin-bottom: 50px;
+			}
 
-        #nieuwe-items {
-            display: flex-row;
-            justify-content: space-between;
-        }
+			.item-img {
+				width: 100px;
+				height: 100px;
+				background-color: #ddd;
+			}
 
-        .item {
-            border: 2px solid #ccc;
-            width: 800px;
-            background-color: #fff;
-            text-align: right;
-            margin-bottom: 50px;
-        }
+			.item-img img {
+				cursor: pointer;
+			}
 
-        .item-img {
-            width: 100px;
-            height: 100px;
-            background-color: #ddd;
-        }
+			.item-body {
+				padding: 25px;
+				color: #789;
+			}
 
-        .item-img img {
-            cursor: pointer;
-        }
+			.item-body h4 {
+				font-weight: bold;
+				margin: 0;
+			}
 
-        .item-body {
-            padding: 25px;
-            color: #789;
-        }
+			.item-body .prijs,
+			input,
+			.totaal {
+				font-size: 2em;
+				color: #009900;
+				margin-bottom: 25px;
+			}
 
-        .item-body h4 {
-            font-weight: bold;
-            margin: 0;
-        }
+			.knop {
+				display: inline-block;
+				text-decoration: none;
+				background-color: #009900;
+				color: #ffffff;
+				padding: 6px 10px;
+				border-radius: 6px;
+				font-size: 0.75em;
+				letter-spacing: 1px;
+			}
 
-        .item-body .prijs,
-        input,
-        .totaal {
-            font-size: 2em;
-            color: #009900;
-            margin-bottom: 25px;
-        }
+			#winkelwagen {
+				text-align: right;
+			}
 
-        .knop {
-            display: inline-block;
-            text-decoration: none;
-            background-color: #009900;
-            color: #ffffff;
-            padding: 6px 10px;
-            border-radius: 6px;
-            font-size: 0.75em;
-            letter-spacing: 1px;
-        }
+			.item-body > input {
+				width: 3rem;
+			}
+		</style>
+		<script src="https://unpkg.com/vue@next"></script>
+	</head>
 
-        #winkelwagen {
-            text-align: right;
-        }
-    </style>
-    <script src="https://unpkg.com/vue@next"></script>
-</head>
+	<body>
+		<div id="app">
+			<header id="main-header">
+				<h1><a href="superherostore.html">{{ titel }}</a></h1>
+				<h5>{{ subtitel }}</h5>
+				<p id="winkelwagen">Items in winkelwagen:</p>
+			</header>
 
-<body>
-    <div id="app">
-        <header id="main-header">
-            <h1></h1>
-            <h5></h5>
-            <p id="winkelwagen">Items in winkelwagen:</p>
-        </header>
-        <section id="cookies">
-            <p>Deze site maakt gebruik van cookies. Door de site verder te gebruiken stem je toe met het gebruik van
-                deze cookies.</p>
-            <input type="checkbox">Deze melding niet meer tonen.
-        </section>
-        <section id="inhoud">
-            <h4>Gekozen items</h4>
-            <section id="nieuwe-items">
-                <div>
-                    <div class="item">
-                        <div class="item-img"><img>
-                        </div>
-                        <div class="item-body">
-                            <div class="prijs">€</div>
-                            <h4></h4>
-                            <p></p>
-                            <input type="number" size="2">
-                            <a href="#" class="knop">verwijder</a>
-                        </div>
+			<section v-if="!showCookieMelding" id="cookies">
+				<p>Deze site maakt gebruik van cookies. Door de site verder te gebruiken stem je toe met het gebruik van deze cookies.</p>
+				<input type="checkbox" v-on:change="check()" />Deze melding niet meer tonen.
+			</section>
 
-                    </div>
-                    <div>
-                        <p class="totaal">Totaal: </p>
-                    </div>
-                </div>
-                <div>
-                    <p>Geen items</p>
-                </div>
-            </section>
-        </section>
-    </div>
-    <script type="text/javascript">
-        const app = {
-            data: function () {
-                return {
+			<section id="inhoud">
+				<h4>Gekozen items</h4>
+				<section id="nieuwe-items">
+					<div>
+						<div class="item" v-for="(item, index) in items">
+							<div class="item-img">
+								<img v-bind:src="pathSmall + item.afbeelding_src" v-on:click="toonGroteFoto(item.afbeelding_src)" />
+							</div>
+							<div class="item-body">
+								<div class="prijs">{{ item.prijs * item.besteld }}€</div>
+								<h4>{{ item.naam }}</h4>
+								<p>{{ item.omschrijving }}</p>
+								<input type="number" v-model="item.besteld" v-on:change="aantalAanpassing(item.besteld, index)" />
+								<a href="#" class="knop" v-on:click="verwijder(index)">verwijder</a>
+							</div>
+						</div>
+						<div>
+							<p v-if="totalePrijs" class="totaal">Totaal:{{ totalePrijs }}€</p>
+						</div>
+					</div>
+					<div>
+						<p v-if="totaalAantalItems > 0">Items: {{ totaalAantalItems }}</p>
+						<p v-if="totaalAantalItems == 0">Geen items</p>
+					</div>
+				</section>
+			</section>
+		</div>
+		<script type="text/javascript">
+			const app = {
+				data: function () {
+					return {
+						titel: "Superhero store",
+						subtitel: "Your break from the office life!",
+						pathSmall: "images/small/",
+						pathBig: "images/big/",
+						showCookieMelding: true,
+						items: [],
+					};
+				},
+				methods: {
+					toonGroteFoto: function (url) {
+						window.open(this.pathBig + url);
+					},
+					check: function () {
+						this.showCookieMelding = false;
+						localStorage.showCookieMelding = false;
+					},
+					verwijder: function (index) {
+						this.items.splice(index, 1);
+						this.saveLocalStorageWinkelwagen();
+					},
+					aantalAanpassing: function (aantal, index) {
+						this.items[index].besteld = aantal;
+						this.saveLocalStorageWinkelwagen();
+					},
+					saveLocalStorageWinkelwagen: function () {
+						let temp = this.items.filter((item) => item.besteld !== 0);
+						localStorage.winkelwagen = JSON.stringify(temp);
+					},
+				},
+				computed: {
+					totalePrijs: function () {
+						let totaal = 0;
+						this.items.forEach((element) => {
+							if (element.besteld !== 0) {
+								let temp = element.besteld * element.prijs;
+								totaal = totaal + temp;
+							}
+						});
+						return totaal;
+					},
+					totaalAantalItems: function () {
+						let totaal = 0;
+						this.items.forEach((element) => {
+							if (element.besteld !== 0) {
+								totaal = totaal + element.besteld;
+							}
+						});
+						return totaal;
+					},
+				},
+				mounted() {
+					if (localStorage.getItem("showCookieMelding")) {
+						this.showCookieMelding = false;
+					}
+					if (localStorage.getItem("winkelwagen")) {
+						this.items = JSON.parse(localStorage.getItem("winkelwagen"));
+					}
+				},
+			};
 
-                }
-            },
-            methods: {
-                toonGroteFoto: ,
-                check: ,
-                verwijder: ,
-                aantalAanpassing: ,
-                saveLocalStorageWinkelwagen: 
-            },
-            computed: {
-                totalePrijs: function () {
-
-                },
-                totaalAantalItems: function () {
-
-                }
-            },
-            mounted() {
-
-            }
-        }
-
-        Vue.createApp(app).mount('#app')
-    </script>
-</body>
-
+			Vue.createApp(app).mount("#app");
+		</script>
+	</body>
 </html>

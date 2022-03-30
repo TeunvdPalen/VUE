@@ -91,6 +91,10 @@
 				font-size: 0.75em;
 				letter-spacing: 1px;
 			}
+
+			.winkelwagen {
+				text-align: right;
+			}
 		</style>
 	</head>
 
@@ -99,15 +103,18 @@
 			<header id="main-header">
 				<h1 v-text="titel"></h1>
 				<h5 v-text="subtitel"></h5>
+				<p class="winkelwagen">Items in <a href="winkelwagen.html">winkelwagen</a>: {{ aantalInWinkelwagen }}</p>
 			</header>
-			<section v-if="!showCookieMelding" id="cookies">
+
+			<section v-if="showCookieMelding" id="cookies">
 				<p>Deze site maakt gebruik van cookies. Door de site verder te gebruiken stem je toe met het gebruik van deze cookies.</p>
-				<input type="checkbox" v-model="showCookieMelding" />Deze melding niet meer tonen.
+				<input type="checkbox" v-on:change="check()" />Deze melding niet meer tonen.
 			</section>
+
 			<section id="inhoud">
 				<h4>Nieuwe items</h4>
 				<section id="nieuwe-items">
-					<div class="item" v-for="item in items">
+					<div class="item" v-for="(item, index) in items">
 						<div class="item-img">
 							<img v-bind:src="pathSmall + item.afbeelding_src" v-on:click="toonGroteFoto(item.afbeelding_src)" />
 						</div>
@@ -115,7 +122,8 @@
 							<div class="prijs">{{ item.prijs }}€</div>
 							<h4>{{ item.naam }}</h4>
 							<p>{{ item.omschrijving }}</p>
-							<a href="#" class="knop">BESTEL</a>
+							<a href="#" v-on:click.prevent="VoegToeAanWinkelwagen(index)" class="knop">BESTEL</a>
+							<div class="besteld">Besteld: {{ item.besteld }}</div>
 						</div>
 					</div>
 				</section>
@@ -134,6 +142,7 @@
 								omschrijving: "Neem je hond mee als sidekick op al je avonturen!",
 								prijs: 29.99,
 								afbeelding_src: "elias-castillo-7-ToFEHzMNw-unsplash.jpg",
+								besteld: 0,
 							},
 							{
 								id: 2,
@@ -141,6 +150,7 @@
 								omschrijving: "Laat de kleine meid tonen hoe speciaal ze is!",
 								prijs: 34.99,
 								afbeelding_src: "gabriela-braga-CVEWeDNsJP4-unsplash.jpg",
+								besteld: 0,
 							},
 							{
 								id: 3,
@@ -148,17 +158,53 @@
 								omschrijving: "Je wil niet altijd dat je herkent wordt voor je goede daden!",
 								prijs: 14.99,
 								afbeelding_src: "joey-nicotra-0EI_4R2r0qg-unsplash.jpg",
+								besteld: 0,
 							},
 						],
 						pathSmall: "images/small/",
 						pathBig: "images/big/",
-						showCookieMelding: false,
+						showCookieMelding: true,
+						winkelwagen: [],
+						aantalInWinkelwagen: 0,
 					};
 				},
 				methods: {
 					toonGroteFoto: function (url) {
 						window.open(this.pathBig + url);
 					},
+					check: function () {
+						this.showCookieMelding = false;
+						localStorage.showCookieMelding = false;
+					},
+					VoegToeAanWinkelwagen: function (index) {
+						this.items[index].besteld += 1;
+						this.aantalInWinkelwagen += 1;
+						this.saveLocalStorageWinkelwagen();
+					},
+					saveLocalStorageWinkelwagen: function () {
+						let temp = this.items.filter((item) => item.besteld !== 0);
+						console.log(temp);
+						localStorage.winkelwagen = JSON.stringify(temp);
+					},
+				},
+				mounted() {
+					if (localStorage.getItem("showCookieMelding")) {
+						this.showCookieMelding = false;
+					}
+					if (localStorage.getItem("winkelwagen")) {
+						let tempLs = JSON.parse(localStorage.getItem("winkelwagen"));
+						//alle items in LS overlopen
+						//find in de data overeenkomstig item:
+						//update item in data met besteld uit item van LS
+						//update aantalInWinkelwagen
+						tempLs.forEach((itemInLs) => {
+							let gevondenItemInData = this.items.find((itemInData) => itemInData.id == itemInLs.id);
+							if (gevondenItemInData) {
+								gevondenItemInData.besteld = itemInLs.besteld;
+								this.aantalInWinkelwagen += itemInLs.besteld;
+							}
+						});
+					}
 				},
 			};
 
