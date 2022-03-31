@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Template</title>
+		<script src="https://unpkg.com/vue@next"></script>
+		<style>
+			/* Enter and leave animations can use different durations and timing functions.*/
+			.slide-fade-enter-active {
+				transition: all 0.3s ease;
+			}
+			.slide-fade-leave-active {
+				transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+			}
+			.slide-fade-enter-from,
+			.slide-fade-leave-to {
+				transform: translateX(10px);
+				opacity: 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<button v-on:click="show = !show">Toggle</button>
+			<transition name="slide-fade">
+				<h1 v-if="show">hello</h1>
+			</transition>
+		</div>
+
+		<script>
+			const app = {
+				data: function () {
+					return {
+						show: true,
+					};
+				},
+			};
+
+			Vue.createApp(app).mount("#app");
+		</script>
+	</body>
+</html>

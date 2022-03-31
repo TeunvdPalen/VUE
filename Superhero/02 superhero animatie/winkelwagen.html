@@ -90,8 +90,27 @@
 				text-align: right;
 			}
 
-			.item-body > input {
-				width: 3rem;
+			.fade-leave-to {
+				opacity: 0;
+				transform: translateX(500px);
+			}
+
+			.fade-leave-active {
+				transition: 1s;
+			}
+
+			.itemTransition-leave-to {
+				opacity: 0;
+				transform: translateX(-1250px);
+			}
+
+			.itemTransition-leave-active {
+				position: absolute;
+				transition: 2s;
+			}
+
+			.itemTransition-move {
+				transition: transform 1s;
 			}
 		</style>
 		<script src="https://unpkg.com/vue@next"></script>
@@ -100,40 +119,46 @@
 	<body>
 		<div id="app">
 			<header id="main-header">
-				<h1><a href="superherostore.html">{{ titel }}</a></h1>
-				<h5>{{ subtitel }}</h5>
-				<p id="winkelwagen">Items in winkelwagen: {{ aantalInWinkelwagen }}</p>
+				<h1><a href="superheroStore.html">{{titel}}</a></h1>
+				<h5>{{subtitel}}</h5>
+				<p id="winkelwagen">Items in winkelwagen: {{totaalAantalItems}}</p>
 			</header>
 
-			<section v-if="showCookieMelding" id="cookies">
-				<p>Deze site maakt gebruik van cookies. Door de site verder te gebruiken stem je toe met het gebruik van deze cookies.</p>
-				<input type="checkbox" v-on:change="check()" />Deze melding niet meer tonen.
-			</section>
+			<transition name="fade">
+				<section id="cookies" v-if="showCookieMelding">
+					<p>Deze site maakt gebruik van cookies. Door de site verder te gebruiken stem je toe met het gebruik van deze cookies.</p>
+					<label><input type="checkbox" v-on:change="check()" />Deze melding niet meer tonen.</label>
+				</section>
+			</transition>
 
 			<section id="inhoud">
 				<h4>Gekozen items</h4>
 				<section id="nieuwe-items">
-					<div>
-						<div class="item" v-for="(item, index) in items">
-							<div class="item-img">
-								<img v-bind:src="pathSmall + item.afbeelding_src" v-on:click="toonGroteFoto(item.afbeelding_src)" />
-							</div>
-							<div class="item-body">
-								<div class="prijs">{{ item.prijs * item.besteld }}€</div>
-								<h4>{{ item.naam }}</h4>
-								<p>{{ item.omschrijving }}</p>
-								<input type="number" v-model="item.besteld" v-on:change="aantalAanpassing(item.besteld, index)" />
-								<a href="#" class="knop" v-on:click="verwijder(index)">verwijder</a>
+					<transition name="itemTransition" tag="div">
+						<div v-if="items.length > 0">
+							<transition-group name="itemTransition" tag="div">
+								<div class="item" v-for="(item,index) in items" :key="item.id">
+									<div class="item-img">
+										<img v-bind:src="pathSmall +item.src" v-on:click="toonGroteFoto(item.src)" />
+									</div>
+									<div class="item-body">
+										<div class="prijs">{{(parseFloat(item.prijs) * parseFloat(item.besteld)).toFixed(2)}}€</div>
+										<h4>{{item.naam}}</h4>
+										<p>{{item.omschrijving}}</p>
+										<input type="number" v-model="item.besteld" size="2" v-on:change="aantalAanpassing(index)" />
+										<a href="#" class="knop" v-on:click="verwijder(index)">verwijder</a>
+									</div>
+								</div>
+							</transition-group>
+							<div>
+								<p class="totaal">Totaal: {{totalePrijs.toFixed(2)}}</p>
 							</div>
 						</div>
-						<div>
-							<p v-if="totalePrijs" class="totaal">Totaal:{{ totalePrijs }}€</p>
+
+						<div v-else>
+							<p>Geen items</p>
 						</div>
-					</div>
-					<div>
-						<p v-if="totaalAantalItems > 0">Items: {{ totaalAantalItems }}</p>
-						<p v-if="totaalAantalItems == 0">Geen items</p>
-					</div>
+					</transition>
 				</section>
 			</section>
 		</div>
@@ -145,58 +170,62 @@
 						subtitel: "Your break from the office life!",
 						pathSmall: "images/small/",
 						pathBig: "images/big/",
-						showCookieMelding: true,
+						showCookieMelding: false,
 						items: [],
 					};
 				},
 				methods: {
-					toonGroteFoto: function (url) {
-						window.open(this.pathBig + url);
+					toonGroteFoto: function (src) {
+						window.open(this.pathBig + src);
 					},
 					check: function () {
 						this.showCookieMelding = false;
-						localStorage.showCookieMelding = false;
+						localStorage.setItem("showCookieMelding", false);
 					},
 					verwijder: function (index) {
 						this.items.splice(index, 1);
 						this.saveLocalStorageWinkelwagen();
 					},
-					aantalAanpassing: function (aantal, index) {
-						this.items[index].besteld = aantal;
+					aantalAanpassing: function (index) {
+						if (this.items[index].besteld == 0) {
+							this.items.splice(index, 1);
+						}
 						this.saveLocalStorageWinkelwagen();
 					},
 					saveLocalStorageWinkelwagen: function () {
-						let temp = this.items.filter((item) => item.besteld !== 0);
-						localStorage.winkelwagen = JSON.stringify(temp);
+						localStorage.setItem("winkelwagen", JSON.stringify(this.items));
 					},
 				},
 				computed: {
 					totalePrijs: function () {
 						let totaal = 0;
-						this.items.forEach((element) => {
-							if (element.besteld !== 0) {
-								let temp = element.besteld * element.prijs;
-								totaal = totaal + temp;
+						this.items.forEach((item) => {
+							if (item.besteld > 0) {
+								totaal += item.besteld * item.prijs;
 							}
 						});
 						return totaal;
 					},
 					totaalAantalItems: function () {
 						let totaal = 0;
-						this.items.forEach((element) => {
-							if (element.besteld !== 0) {
-								totaal = totaal + element.besteld;
-							}
-						});
+						if (this.items.length > 0) {
+							this.items.forEach((item) => {
+								if (item.besteld > 0) {
+									totaal += parseInt(item.besteld);
+								}
+							});
+						}
 						return totaal;
 					},
 				},
 				mounted() {
-					if (localStorage.getItem("showCookieMelding")) {
-						this.showCookieMelding = false;
-					}
 					if (localStorage.getItem("winkelwagen")) {
 						this.items = JSON.parse(localStorage.getItem("winkelwagen"));
+					}
+					if (localStorage.getItem("showCookieMelding")) {
+						this.showCookieMelding = JSON.parse(localStorage.getItem("showCookieMelding"));
+					} else {
+						this.showCookieMelding = true;
 					}
 				},
 			};

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Template</title>
+		<script src="https://unpkg.com/vue@next"></script>
+		<style>
+			p {
+				background-color: red;
+			}
+			.bounce-enter-active {
+				animation: bounce-in 1.5s;
+			}
+			.bounce-leave-active {
+				animation: bounce-in 1.5s reverse;
+			}
+
+			@keyframes bounce-in {
+				0% {
+					transform: scale(0);
+				}
+				50% {
+					transform: scale(1.5);
+				}
+				100% {
+					transform: scale(1);
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<button @click="show = !show">Toggle show</button>
+			<transition name="bounce">
+				<p v-if="show">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+			</transition>
+		</div>
+
+		<script>
+			const app = {
+				data: function () {
+					return {
+						show: true,
+					};
+				},
+			};
+
+			Vue.createApp(app).mount("#app");
+		</script>
+	</body>
+</html>
