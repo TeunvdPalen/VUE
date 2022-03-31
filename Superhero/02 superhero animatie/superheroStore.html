@@ -173,7 +173,7 @@
 								<a href="#" class="knop" v-on:click.prevent="VoegToeAanWinkelwagen(index)">BESTEL</a>
 							</transition>
 							<transition name="bestelAantal">
-								<p class="besteld" v-if="item.besteld>0">Besteld: {{item.besteld}}</p>
+								<p class="besteld" v-if="item.besteld>0" :key="item.besteld">Besteld: {{item.besteld}}</p>
 							</transition>
 						</div>
 					</div>
