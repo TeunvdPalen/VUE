@@ -146,8 +146,7 @@
 				<h1>{{titel}}</h1>
 				<h5>{{subtitel}}</h5>
 				<transition name="winkelwagen" mode="out-in">
-					<p v-if="showWinkelwagen" id="winkelwagen">Items in <a href="winkelwagen.html">winkelwagen</a>: {{aantalInWinkelwagen}}</p>
-					<p v-else-if="!showWinkelwagen" id="winkelwagen">Items in <a href="winkelwagen.html">winkelwagen</a>: {{aantalInWinkelwagen}}</p>
+					<p :key="showWinkelwagen" id="winkelwagen">Items in <a href="winkelwagen.html">winkelwagen</a>: {{aantalInWinkelwagen}}</p>
 				</transition>
 			</header>
 
