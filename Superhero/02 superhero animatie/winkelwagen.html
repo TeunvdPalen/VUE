@@ -152,11 +152,14 @@
 							</transition-group>
 							<div>
 								<p class="totaal">Totaal: {{totalePrijs.toFixed(2)}}</p>
+								<p v-if="totaalAantalItems > 0">Items: {{ totaalAantalItems }}</p>
 							</div>
 						</div>
 
 						<div v-else>
-							<p>Geen items</p>
+							<div>
+								<p v-if="totaalAantalItems == 0">Geen items</p>
+							</div>
 						</div>
 					</transition>
 				</section>

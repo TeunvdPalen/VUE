@@ -22,6 +22,16 @@
 
 			a {
 				color: #ffeedd;
+				text-decoration: none;
+			}
+
+			.router-link {
+				margin-left: 3rem;
+				text-decoration: none;
+			}
+
+			.router-link-active {
+				font-weight: bold;
 			}
 
 			#cookies,
@@ -136,18 +146,68 @@
 			.winkelwagen-leave-active {
 				transition: 1s;
 			}
+
+			.item-Wagen {
+				border: 2px solid #ccc;
+				width: 800px;
+				background-color: #fff;
+				text-align: right;
+				margin-bottom: 50px;
+			}
+
+			.item-img-Wagen {
+				width: 100px;
+				height: 100px;
+				background-color: #ddd;
+			}
+
+			.item-body-Wagen {
+				padding: 25px;
+				color: #789;
+			}
+
+			.item-body-Wagen .prijs,
+			input,
+			.totaal {
+				font-size: 2em;
+				color: #009900;
+				margin-bottom: 25px;
+			}
+
+			input {
+				width: 4rem;
+			}
+
+			.itemTransition-leave-to {
+				opacity: 0;
+				transform: translateX(-1250px);
+			}
+
+			.itemTransition-leave-active {
+				position: absolute;
+				transition: 2s;
+			}
+
+			.itemTransition-move {
+				transition: transform 1s;
+			}
 		</style>
 		<script src="https://unpkg.com/vue@next"></script>
+		<script src="https://unpkg.com/vue-router@4"></script>
 	</head>
 
 	<body>
 		<div id="app">
 			<header id="main-header">
-				<h1>{{titel}}</h1>
+				<h1><router-link to="/">{{ titel }}</router-link></h1>
 				<h5>{{subtitel}}</h5>
 				<transition name="winkelwagen" mode="out-in">
 					<p :key="showWinkelwagen" id="winkelwagen">Items in <a href="winkelwagen.html">winkelwagen</a>: {{aantalInWinkelwagen}}</p>
 				</transition>
+				<nav>
+					<router-link class="router-link" to="/">Store</router-link>
+					<router-link class="router-link" to="/winkelwagen">Winkelwagen</router-link>
+				</nav>
 			</header>
 
 			<transition name="fade">
@@ -157,12 +217,16 @@
 				</section>
 			</transition>
 
+			<router-view></router-view>
+		</div>
+
+		<script type="text/x-template" id="homeTemplate">
 			<section id="inhoud">
 				<h4>Nieuwe items</h4>
 				<section id="nieuwe-items">
-					<div class="item" v-for="(item,index) in items" :key="item.id">
+					<div class="item" v-for="(item,index) in $root.items" :key="item.id">
 						<div class="item-img">
-							<img v-bind:src="pathSmall +item.src" v-on:click="toonGroteFoto(item.src)" />
+							<img v-bind:src="$root.pathSmall +item.src" v-on:click="$root.toonGroteFoto(item.src)" />
 						</div>
 						<div class="item-body">
 							<div class="prijs">{{item.prijs}}€</div>
@@ -178,8 +242,55 @@
 					</div>
 				</section>
 			</section>
-		</div>
-		<script type="text/javascript">
+		</script>
+
+		<script type="text/x-template" id="winkelwagenTemplate">
+			<section id="inhoud">
+				<h4>Gekozen items</h4>
+				<section id="nieuwe-items">
+					<transition name="itemTransition" tag="div">
+						<div v-if="winkelwagen.length > 0">
+							<transition-group name="itemTransition" tag="div">
+								<div class="item-Wagen" v-for="(item,index) in winkelwagen" :key="item.id">
+									<div class="item-img-Wagen">
+										<img v-bind:src="$root.pathSmall +item.src" v-on:click="$root.toonGroteFoto(item.src)" />
+									</div>
+									<div class="item-body-Wagen">
+										<div class="prijs">{{(parseFloat(item.prijs) * parseFloat(item.besteld)).toFixed(2)}}€</div>
+										<h4>{{item.naam}}</h4>
+										<p>{{item.omschrijving}}</p>
+										<input type="number" v-model="item.besteld" size="2" v-on:change="aantalAanpassing(index)" />
+										<button class="knop" v-on:click="verwijder(index)">verwijder</button>
+									</div>
+								</div>
+							</transition-group>
+							<div>
+								<p class="totaal">Totaal: {{totalePrijs.toFixed(2)}}</p>
+								<p v-if="totaalAantalItems > 0">Items: {{ totaalAantalItems }}</p>
+							</div>
+						</div>
+
+						<div v-else>
+							<div>
+								<p v-if="totaalAantalItems == 0">Geen items</p>
+							</div>
+						</div>
+					</transition>
+				</section>
+			</section>
+		</script>
+
+		<script src="js/home.js"></script>
+		<script src="js/winkelwagen.js"></script>
+		<script>
+			const router = new VueRouter.createRouter({
+				history: VueRouter.createWebHashHistory(),
+				routes: [
+					{ path: "/", name: "Home", component: home },
+					{ path: "/winkelwagen", name: "Winkelwagen", component: winkelwagen },
+				],
+			});
+
 			const app = {
 				data: function () {
 					return {
@@ -214,7 +325,6 @@
 								besteld: 0,
 							},
 						],
-						winkelwagen: [],
 						aantalInWinkelwagen: 0,
 						showWinkelwagen: false,
 					};
@@ -227,31 +337,8 @@
 						this.showCookieMelding = false;
 						localStorage.setItem("showCookieMelding", false);
 					},
-					saveLocalStorageWinkelwagen: function () {
-						let temp = this.items.filter((item) => item.besteld !== 0);
-						localStorage.setItem("winkelwagen", JSON.stringify(temp));
-					},
-					VoegToeAanWinkelwagen: function (index) {
-						this.items[index].besteld++;
-						this.aantalInWinkelwagen++;
-						setTimeout(() => {
-							this.showWinkelwagen = true;
-						}, 500);
-						this.showWinkelwagen = false;
-						this.saveLocalStorageWinkelwagen();
-					},
 				},
 				mounted() {
-					if (localStorage.getItem("winkelwagen")) {
-						let tempLs = JSON.parse(localStorage.getItem("winkelwagen"));
-						tempLs.forEach((itemInLs) => {
-							let gevondenItemInData = this.items.find((itemInData) => itemInData.id == itemInLs.id);
-							if (gevondenItemInData) {
-								gevondenItemInData.besteld = itemInLs.besteld;
-								this.aantalInWinkelwagen += itemInLs.besteld;
-							}
-						});
-					}
 					if (localStorage.getItem("showCookieMelding")) {
 						this.showCookieMelding = JSON.parse(localStorage.getItem("showCookieMelding"));
 					} else {
@@ -260,7 +347,7 @@
 				},
 			};
 
-			Vue.createApp(app).mount("#app");
+			Vue.createApp(app).use(router).mount("#app");
 		</script>
 	</body>
 </html>
