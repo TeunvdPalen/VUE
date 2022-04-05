@@ -202,7 +202,7 @@
 				<h1><router-link to="/">{{ titel }}</router-link></h1>
 				<h5>{{subtitel}}</h5>
 				<transition name="winkelwagen" mode="out-in">
-					<p :key="showWinkelwagen" id="winkelwagen">Items in <a href="winkelwagen.html">winkelwagen</a>: {{aantalInWinkelwagen}}</p>
+					<p :key="showWinkelwagen" id="winkelwagen">Items in <router-link to="/winkelwagen">winkelwagen</router-link>: {{aantalInWinkelwagen}}</p>
 				</transition>
 				<nav>
 					<router-link class="router-link" to="/">Store</router-link>
@@ -224,7 +224,7 @@
 			<section id="inhoud">
 				<h4>Nieuwe items</h4>
 				<section id="nieuwe-items">
-					<div class="item" v-for="(item,index) in $root.items" :key="item.id">
+					<div class="item" v-for="(item,index) in items" :key="item.id">
 						<div class="item-img">
 							<img v-bind:src="$root.pathSmall +item.src" v-on:click="$root.toonGroteFoto(item.src)" />
 						</div>
@@ -299,32 +299,7 @@
 						pathSmall: "images/small/",
 						pathBig: "images/big/",
 						showCookieMelding: false,
-						items: [
-							{
-								id: 1,
-								naam: "hondenpak superman",
-								omschrijving: "Neem je hond mee als sidekick op al je avonturen!",
-								prijs: 29.99,
-								src: "elias-castillo-7-ToFEHzMNw-unsplash.jpg",
-								besteld: 0,
-							},
-							{
-								id: 2,
-								naam: "Wonder Woman",
-								omschrijving: "Laat de kleine meid tonen hoe speciaal ze is!",
-								prijs: 34.99,
-								src: "gabriela-braga-CVEWeDNsJP4-unsplash.jpg",
-								besteld: 0,
-							},
-							{
-								id: 3,
-								naam: "Spiderman masker",
-								omschrijving: "Je wil niet altijd dat je herkent wordt voor je goede daden!",
-								prijs: 14.99,
-								src: "joey-nicotra-0EI_4R2r0qg-unsplash.jpg",
-								besteld: 0,
-							},
-						],
+
 						aantalInWinkelwagen: 0,
 						showWinkelwagen: false,
 					};
