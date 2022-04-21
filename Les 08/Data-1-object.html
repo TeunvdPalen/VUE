@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Template</title>
+		<script src="https://unpkg.com/vue@next"></script>
+	</head>
+
+	<body>
+		<div id="app">
+			<blog-post v-for="post in posts" v-bind:post="post" v-bind:key="post.id"></blog-post>
+		</div>
+
+		<script type="text/x-template" id="blog-postTemplate">
+			<div class="blog-post">
+				<h3>{{ post.title }}</h3>
+				<div v-html="post.content"></div>
+				<p>{{post.pubDatum}}</p>
+			</div>
+		</script>
+
+		<script>
+			const app = Vue.createApp({
+				data: function () {
+					return {
+						posts: [
+							{
+								id: 1,
+								title: "Mijn reis met Vue",
+								content: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.",
+								pubDatum: "02/04/1684",
+							},
+							{
+								id: 2,
+								title: "Bloggen met Vue",
+								content: "Cras tempus, tellus quis facilisis dignissim, lorem libero rhoncus dolor, in venenatis neque arcu a mauris.",
+								pubDatum: "08/12/1844",
+							},
+							{
+								id: 3,
+								title: "Waarom Vue zo leuk is",
+								content: "Vestibulum vitae metus sed purus elementum malesuada. Aliquam feugiat metus ut orci.",
+								pubDatum: "15/02/1984",
+							},
+						],
+					};
+				},
+			});
+
+			app.component("blog-post", {
+				props: ["post"],
+				template: "#blog-postTemplate",
+			});
+
+			app.mount("#app");
+		</script>
+	</body>
+</html>

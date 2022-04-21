@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Template</title>
+		<script src="https://unpkg.com/vue@next"></script>
+		<style>
+			.error {
+				color: red;
+				margin-left: 1rem;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<img src="https://source.unsplash.com/user/erondu/800x600" alt="a picture" />
+			<ul>
+				<individualcomment v-for="comment in comments" v-bind:comment="comment" v-bind:key="comment.id"></individualcomment>
+			</ul>
+			<input v-model="newComment" @keyup.enter="addComment" placeholder=" Voeg je commentaar toe" />
+			<span class="error">{{ error }}</span>
+		</div>
+
+		<script type="text/x-template" id="commentTemplate">
+			<li><a v-bind:href="comment.userlink">{{ comment.user }}</a> - {{ comment.msg }}</li>
+		</script>
+
+		<script>
+			const app = Vue.createApp({
+				data: function () {
+					return {
+						comments: [
+							{ id: 1, user: "Jan", userlink: "http://www.facebook.com", msg: "Like!" },
+							{ id: 2, user: "Piet", userlink: "http://www.facebook.com", msg: "I love this" },
+							{ id: 3, user: "Mies", userlink: "http://www.facebook.com", msg: "Waar is dit genomen?" },
+						],
+						newComment: "",
+						error: "",
+					};
+				},
+				methods: {
+					addComment: function () {
+						if (this.newComment.length > 0) {
+							this.comments.push({
+								id: this.comments[this.comments.length - 1].id + 1,
+								user: "VUE",
+								userlink: "http://www.facebook.com",
+								msg: this.newComment,
+							});
+							console.log(this.comments);
+							this.newComment = "";
+							this.error = "";
+						} else {
+							this.error = "Vul een comment in";
+						}
+					},
+				},
+			});
+
+			app.component("individualcomment", {
+				props: ["comment"],
+				template: "#commentTemplate",
+			});
+
+			app.mount("#app");
+		</script>
+	</body>
+</html>

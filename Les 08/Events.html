@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Events</title>
+		<script src="https://unpkg.com/vue@next"></script>
+	</head>
+
+	<body>
+		<div id="app">
+			<my-button titel="Klik op de knop" v-on:mijn-klik="geklikt"></my-button>
+		</div>
+
+		<script type="text/x-template" id="buttonTemplate">
+			<h3>{{titel}}</h3>
+			<button v-on:click="$emit('mijn-klik', ++teller)">Klik</button>
+		</script>
+
+		<script>
+			const app = Vue.createApp({
+				data: function () {
+					return {};
+				},
+				methods: {
+					geklikt: function (waarde) {
+						console.log("Main app ziet dat er geklikt is." + waarde);
+					},
+				},
+			});
+
+			app.component("my-button", {
+				data: function () {
+					return {
+						teller: 0,
+					};
+				},
+				props: ["titel"],
+				template: "#buttonTemplate",
+			});
+
+			app.mount("#app");
+		</script>
+	</body>
+</html>
