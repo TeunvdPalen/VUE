@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Template</title>
+  <script src="https://unpkg.com/vue@next"></script>
+  <style type="text/css">
+    .container {
+      background-color: lightgrey;
+      color: white;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 50px;
+    }
+
+    #social {
+      display: flex;
+      flex-direction: column;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div id="app">
+    <header-template>
+      <template v-slot:logo>
+        <img src="images/logo2.png">
+      </template>
+      <template v-slot:naam>Mijn Bedrijf</template>
+      <template v-slot:socials>
+        <a href="https://www.facebook.com"><img src="images/facebook.png"></a>
+        <a href="https://www.instagram.com"><img src="images/instagram.png"></a>
+        <a href="https://www.youtube.com"><img src="images/youtube.png"></a>
+      </template>
+    </header-template>
+  </div>
+
+  <script type="text/x-template" id="template">
+    <div class='container'>
+      <slot name='logo'>
+        <img src="images/logo.png" alt="">
+      </slot>
+      <slot name='naam'>
+        <h1>Bedrijfsnaam</h1>
+      </slot>
+      <ul>
+        <slot name='socials'>
+          <li><a href="https://www.facebook.com">Facebook</a></li>
+          <li><a href="https://www.instagram.com">Instagram</a></li>
+          <li><a href="https://www.youtube.com">Youtube</a></li>
+        </slot>
+      </ul>
+    </div>
+  </script>
+
+  <script>
+    const app = Vue.createApp({
+      data: function () {
+        return {
+          //
+        };
+      },
+    });
+
+    app.component("header-template", {
+      data: function () {
+        return {
+          //
+        };
+      },
+      template: "#template",
+    });
+
+    app.mount("#app");
+  </script>
+</body>
+
+</html>

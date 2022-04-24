@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<style type="text/css">
+		body,
+		html {
+			font-family: verdana, sans-serif;
+			color: #666;
+			background-color: #f9f9f9;
+			margin: 0;
+		}
+
+		header {
+			background: #770000;
+			padding: 20px 60px;
+			margin: 0;
+			color: #ffeedd;
+			border-bottom: 1px solid #ddd;
+		}
+
+		a {
+			text-decoration: none;
+			color: #ffeedd;
+		}
+
+		#cookies,
+		#inhoud {
+			padding: 20px 30px;
+		}
+
+		#cookies {
+			background-color: orange
+		}
+
+		#nieuwe-items {
+			display: flex;
+			justify-content: space-between;
+		}
+
+		.winkelwagen-item {
+			border: 2px solid #ccc;
+			width: 800px;
+			background-color: #fff;
+			text-align: right;
+			margin-bottom: 50px;
+		}
+
+		.winkelwagen-item-img {
+			width: 100px;
+			height: 100px;
+			background-color: #ddd;
+		}
+
+		input {
+			font-size: 2em;
+			color: #009900;
+			margin-bottom: 25px;
+		}
+
+		.item {
+			border: 2px solid #ccc;
+			width: 300px;
+			background-color: #fff;
+			text-align: center;
+			height: 550px
+		}
+
+		.besteld {
+			position: relative;
+			top: -250px;
+			color: white;
+			font-size: 29px;
+			background: green
+		}
+
+		.item-img {
+			width: 300px;
+			height: 300px;
+			background-color: #ddd;
+		}
+
+		.item-img img {
+			cursor: pointer;
+		}
+
+		.item-body {
+			padding: 25px;
+			color: #789;
+		}
+
+		.item-body h4 {
+			font-weight: bold;
+			margin: 0;
+		}
+
+		.item-body .prijs,
+		.totaal {
+			font-size: 2em;
+			color: #009900;
+			margin-bottom: 25px;
+		}
+
+		.knop {
+			display: inline-block;
+			text-decoration: none;
+			background-color: #009900;
+			color: #ffffff;
+			padding: 6px 10px;
+			border-radius: 6px;
+			font-size: 0.75em;
+			letter-spacing: 1px;
+		}
+
+		#winkelwagen {
+			text-align: right;
+		}
+
+		.itemTransition-leave-to {
+			transform: translateX(-500px);
+			opacity: 0;
+		}
+
+		.itemTransition-leave-active {
+			/* position: absolute; */
+			transition: all 1s ease;
+
+		}
+
+		.itemTransition-move {
+			transition: transform 1s;
+		}
+
+		.cookieTransition-leave-to {
+			transform: translateX(500px);
+			opacity: 0;
+		}
+
+		.winkelwagen-enter-active,
+		.winkelwagen-leave-active,
+		.cookieTransition-leave-active {
+			transition: all .3s ease;
+		}
+
+		.winkelwagen-enter-from,
+		.winkelwagen-leave-to {
+			transform: translateX(50px);
+			opacity: 0;
+		}
+
+		.winkelwagen-enter-to {
+			opacity: 1;
+			transform: translateX(0px);
+		}
+
+		#winkelwagenBox {
+			height: 35px;
+		}
+
+		.knopTransition-enter-from,
+		.besteldTransition-enter-from {
+			opacity: 0;
+			transform: scale(1.3) translateY(10px);
+		}
+
+		.knopTransition-enter-active,
+		.besteldTransition-enter-active {
+			transition: all 2s
+		}
+
+		.knopTransition-enter-to,
+		.besteldTransition-enter-to {
+			opacity: 1;
+		}
+
+		.router-link {
+			margin: 50px;
+		}
+
+		h1 a {
+			text-decoration: none;
+		}
+
+		.router-link-active {
+			font-weight: bold
+		}
+	</style>
+	<script src="https://unpkg.com/vue@next"></script>
+	<script src="https://unpkg.com/vue-router@4"></script>
+</head>
+
+<body>
+	<div id="app">
+		<header id="main-header">
+			<h1>
+				<router-link to="/">{{titel}}</router-link>
+			</h1>
+			<h5>{{subtitel}}</h5>
+			<!-- TODO zorgen dat de home.js de winkelwagen kan tonen/verbergen -->
+			<div id="winkelwagenBox">
+				<transition name="winkelwagen">
+					<p v-if="showWinkelwagen" id="winkelwagen">Items in <router-link to="/winkelwagen">Winkelwagen
+						</router-link>:
+						{{aantalInWinkelwagen}}</p>
+				</transition>
+			</div>
+			<nav>
+				<router-link class="router-link" to="/">Store</router-link>
+				<router-link class="router-link" to="/winkelwagen">Winkelwagen</router-link>
+			</nav>
+		</header>
+		<cookieMelding></cookieMelding>
+		<router-view></router-view>
+	</div>
+
+	<script type="text/x-template" id="cookie-Template">
+		<transition name="cookieTransition">
+			<section id="cookies" v-if="showCookieMelding">
+				<p>Deze site maakt gebruik van cookies. Door de site verder te gebruiken stem je toe met het gebruik
+					van
+					deze cookies.</p>
+				<input type="checkbox" v-on:change="check()">Deze melding niet meer tonen.
+			</section>
+		</transition>
+	</script>
+
+	<script type="text/x-template" id="homeTemplate">
+		<div>
+			<section id="inhoud">
+				<h4>Nieuwe items</h4>
+				<section id="nieuwe-items">
+					<item class="item" v-for='(item,index) in items' :key="item.id"></item>
+				</section>
+			</section >
+		</div >
+	</script>
+
+	<script type="text/x-template" id="item-Template">
+		<div class="item" v-for='(item,index) in items' :key="item.id">
+			<div class="item-img">
+				<img v-bind:src="pathSmall +item.src" v-on:click="toonGroteFoto(item.src)">
+			</div>
+			<div class="item-body">
+				<div class="prijs">{{ item.prijs }}€</div>
+				<h4>{{ item.naam }}</h4>
+				<p>{{ item.omschrijving }}</p>
+				<transition name="knopTransition" appear>
+					<div>
+						<a href="#" class="knop" v-on:click.prevent="VoegToeAanWinkelwagen(index)">BESTEL</a>
+					</div>
+				</transition>
+
+				<transition name="besteldTransition">
+					<p class="besteld" v-if="item.besteld>0 && showBesteld[index]">Besteld: {{item.besteld}}</p>
+				</transition>
+			</div >
+		</div >
+	</script>
+
+	<script type="text/x-template" id="winkelwagenTemplate">
+        <div>
+            <section id="inhoud">
+            <h4>Gekozen items</h4>
+            <section id="nieuwe-items">
+                <transition name="itemTransition" tag="div">
+                <div v-if="items.length > 0">
+                    <transition-group name="itemTransition" tag="div">
+                    <div class="winkelwagen-item" v-for='(item,index) in items' :key='item.id'>
+                        <div class="winkelwagen-item-img">
+                            <img v-bind:src="pathSmall +item.src"
+                                v-on:click="toonGroteFoto(item.src)">
+                        </div>
+                        <div class="item-body">
+                            <div class="prijs">
+                                {{(parseFloat(item.prijs) * parseFloat(item.besteld)).toFixed(2)}}€
+                            </div>
+                            <h4>{{item.naam}}</h4>
+                            <p>{{item.omschrijving}}</p>
+                            <input type="number" v-model="item.besteld" size="2" v-on:change="aantalAanpassing(index)">
+                            <a href="#" class="knop" v-on:click.prevent="verwijder(index)">verwijder</a>
+                        </div>
+                    </div>
+                </transition-group>
+                    <div>
+                        <p class="totaal">Totaal: {{totalePrijs.toFixed(2)}}</p>
+                    </div>
+                </div>
+            </transition>
+                <div v-if="items.length == 0">
+                    <p>Geen items</p>
+                </div>
+            </section>
+        </section>
+    </div>
+    </script>
+	<script src="home.js"></script>
+	<script src="winkelwagen.js"></script>
+	<script>
+		const app = Vue.createApp({
+			data: function () {
+				return {
+					titel: "Superhero store",
+					subtitel: "Your break from the office life!",
+					aantalInWinkelwagen: 0,
+					showWinkelwagen: true,
+				}
+			},
+		})
+
+		const router = new VueRouter.createRouter({
+			history: VueRouter.createWebHashHistory(),
+			routes: [
+				{ path: '/', name: "Home", component: home },
+				{ path: '/winkelwagen', name: "Winkelwagen", component: winkelwagen }
+			]
+		})
+
+		app.component('cookieMelding', {
+			data: function () {
+				return {
+					showCookieMelding: false
+				};
+			},
+			methods: {
+				check: function () {
+					this.showCookieMelding = false;
+					localStorage.setItem("showCookieMelding", false);
+				}
+			},
+			mounted() {
+				if (localStorage.getItem("showCookieMelding")) {
+					this.showCookieMelding = JSON.parse(localStorage.getItem("showCookieMelding"))
+				} else {
+					this.showCookieMelding = true
+				}
+			},
+			template: '#cookie-Template'
+		})
+
+		app.component('item', {
+			props: ["item", "pathSmall", "showBesteld"],
+			template: '#item-Template'
+		})
+
+		app.mount('#app')
+	</script>
+</body>
+
+</html>
