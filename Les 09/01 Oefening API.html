@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Template</title>
+		<script src="https://unpkg.com/vue@next"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	</head>
+
+	<body>
+		<div id="app">
+			<h1>GitHub Users Profiles</h1>
+			<div>
+				<github-user-profile v-for="username in usernames" :username="username"></github-user-profile>
+			</div>
+		</div>
+
+		<script type="text/x-template" id="github-user-profile-template">
+			<div>
+				<section v-if="errored">
+					<p>We're sorry, we're not able to retrieve this information at the moment, please try back later</p>
+				</section>
+				<section v-else>
+					<div v-if="loading">Loading...</div>
+					<img :src="user.avatar_url">
+					<p>Naam: {{user.name}}</p>
+					<p>Website: <a :href="user.blog">{{user.blog}}</a></p>
+					<hr>
+				</section>
+			</div>
+		</script>
+
+		<script>
+			const app = Vue.createApp({
+				data: function () {
+					return {
+						usernames: ["dannydrij", "defunkt", "pjhyett", "wycats", "TeunvdPalen"],
+					};
+				},
+			});
+
+			app.component("github-user-profile", {
+				data: function () {
+					return {
+						user: {},
+						errored: false,
+						loading: true,
+					};
+				},
+				template: "#github-user-profile-template",
+				props: ["username"],
+				created() {
+					axios
+						.get(`https://api.github.com/users/${this.username}`, { headers: { Authorization: "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" } })
+						.then((response) => {
+							this.user = response.data;
+						})
+						.catch((error) => {
+							console.log(error);
+							// fout met de API request
+							this.errored = true;
+						})
+						.finally(() => (this.loading = false));
+				},
+			});
+
+			// { headers: { Authorization: "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" } }
+			app.mount("#app");
+		</script>
+	</body>
+</html>
