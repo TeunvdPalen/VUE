@@ -1,228 +1,231 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title></title>
-		<meta charset="utf-8" />
-		<style type="text/css">
-			body,
-			html {
-				font-family: verdana, sans-serif;
-				color: #666;
-				background-color: #f9f9f9;
-				margin: 0;
-			}
 
-			header {
-				background: #770000;
-				padding: 20px 60px;
-				margin: 0;
-				color: #ffeedd;
-				border-bottom: 1px solid #ddd;
-			}
+<head>
+	<title></title>
+	<meta charset="utf-8" />
+	<style type="text/css">
+		body,
+		html {
+			font-family: verdana, sans-serif;
+			color: #666;
+			background-color: #f9f9f9;
+			margin: 0;
+		}
 
-			a {
-				text-decoration: none;
-				color: #ffeedd;
-			}
+		header {
+			background: #770000;
+			padding: 20px 60px;
+			margin: 0;
+			color: #ffeedd;
+			border-bottom: 1px solid #ddd;
+		}
 
-			#cookies,
-			#inhoud {
-				padding: 20px 30px;
-			}
+		a {
+			text-decoration: none;
+			color: #ffeedd;
+		}
 
-			#cookies {
-				background-color: orange;
-			}
+		#cookies,
+		#inhoud {
+			padding: 20px 30px;
+		}
 
-			#nieuwe-items {
-				display: flex;
-				justify-content: space-between;
-			}
+		#cookies {
+			background-color: orange;
+		}
 
-			.winkelwagen-item {
-				border: 2px solid #ccc;
-				width: 800px;
-				background-color: #fff;
-				text-align: right;
-				margin-bottom: 50px;
-			}
+		#nieuwe-items {
+			display: flex;
+			justify-content: space-between;
+		}
 
-			.winkelwagen-item-img {
-				width: 100px;
-				height: 100px;
-				background-color: #ddd;
-			}
+		.winkelwagen-item {
+			border: 2px solid #ccc;
+			width: 800px;
+			background-color: #fff;
+			text-align: right;
+			margin-bottom: 50px;
+		}
 
-			input {
-				font-size: 2em;
-				color: #009900;
-				margin-bottom: 25px;
-			}
+		.winkelwagen-item-img {
+			width: 100px;
+			height: 100px;
+			background-color: #ddd;
+		}
 
-			.item {
-				border: 2px solid #ccc;
-				width: 300px;
-				background-color: #fff;
-				text-align: center;
-				height: 550px;
-			}
+		input {
+			font-size: 2em;
+			color: #009900;
+			margin-bottom: 25px;
+		}
 
-			.besteld {
-				position: relative;
-				top: -250px;
-				color: white;
-				font-size: 29px;
-				background: green;
-			}
+		.item {
+			border: 2px solid #ccc;
+			width: 300px;
+			background-color: #fff;
+			text-align: center;
+			height: 550px;
+		}
 
-			.item-img {
-				width: 300px;
-				height: 300px;
-				background-color: #ddd;
-			}
+		.besteld {
+			position: relative;
+			top: -250px;
+			color: white;
+			font-size: 29px;
+			background: green;
+		}
 
-			.item-img img {
-				cursor: pointer;
-			}
+		.item-img {
+			width: 300px;
+			height: 300px;
+			background-color: #ddd;
+		}
 
-			.item-body {
-				padding: 25px;
-				color: #789;
-			}
+		.item-img img {
+			cursor: pointer;
+		}
 
-			.item-body h4 {
-				font-weight: bold;
-				margin: 0;
-			}
+		.item-body {
+			padding: 25px;
+			color: #789;
+		}
 
-			.item-body .prijs,
-			.totaal {
-				font-size: 2em;
-				color: #009900;
-				margin-bottom: 25px;
-			}
+		.item-body h4 {
+			font-weight: bold;
+			margin: 0;
+		}
 
-			.knop {
-				display: inline-block;
-				text-decoration: none;
-				background-color: #009900;
-				color: #ffffff;
-				padding: 6px 10px;
-				border-radius: 6px;
-				font-size: 0.75em;
-				letter-spacing: 1px;
-			}
+		.item-body .prijs,
+		.totaal {
+			font-size: 2em;
+			color: #009900;
+			margin-bottom: 25px;
+		}
 
-			#winkelwagen {
-				text-align: right;
-			}
+		.knop {
+			display: inline-block;
+			text-decoration: none;
+			background-color: #009900;
+			color: #ffffff;
+			padding: 6px 10px;
+			border-radius: 6px;
+			font-size: 0.75em;
+			letter-spacing: 1px;
+		}
 
-			.itemTransition-leave-to {
-				transform: translateX(-500px);
-				opacity: 0;
-			}
+		#winkelwagen {
+			text-align: right;
+		}
 
-			.itemTransition-leave-active {
-				/* position: absolute; */
-				transition: all 1s ease;
-			}
+		.itemTransition-leave-to {
+			transform: translateX(-500px);
+			opacity: 0;
+		}
 
-			.itemTransition-move {
-				transition: transform 1s;
-			}
+		.itemTransition-leave-active {
+			/* position: absolute; */
+			transition: all 1s ease;
+		}
 
-			.cookieTransition-leave-to {
-				transform: translateX(500px);
-				opacity: 0;
-			}
+		.itemTransition-move {
+			transition: transform 1s;
+		}
 
-			.winkelwagen-enter-active,
-			.winkelwagen-leave-active,
-			.cookieTransition-leave-active {
-				transition: all 0.3s ease;
-			}
+		.cookieTransition-leave-to {
+			transform: translateX(500px);
+			opacity: 0;
+		}
 
-			.winkelwagen-enter-from,
-			.winkelwagen-leave-to {
-				transform: translateX(50px);
-				opacity: 0;
-			}
+		.winkelwagen-enter-active,
+		.winkelwagen-leave-active,
+		.cookieTransition-leave-active {
+			transition: all 0.3s ease;
+		}
 
-			.winkelwagen-enter-to {
-				opacity: 1;
-				transform: translateX(0px);
-			}
+		.winkelwagen-enter-from,
+		.winkelwagen-leave-to {
+			transform: translateX(50px);
+			opacity: 0;
+		}
 
-			#winkelwagenBox {
-				height: 35px;
-			}
+		.winkelwagen-enter-to {
+			opacity: 1;
+			transform: translateX(0px);
+		}
 
-			.knopTransition-enter-from,
-			.besteldTransition-enter-from {
-				opacity: 0;
-				transform: scale(1.3) translateY(10px);
-			}
+		#winkelwagenBox {
+			height: 35px;
+		}
 
-			.knopTransition-enter-active,
-			.besteldTransition-enter-active {
-				transition: all 2s;
-			}
+		.knopTransition-enter-from,
+		.besteldTransition-enter-from {
+			opacity: 0;
+			transform: scale(1.3) translateY(10px);
+		}
 
-			.knopTransition-enter-to,
-			.besteldTransition-enter-to {
-				opacity: 1;
-			}
+		.knopTransition-enter-active,
+		.besteldTransition-enter-active {
+			transition: all 2s;
+		}
 
-			.router-link {
-				margin: 50px;
-			}
+		.knopTransition-enter-to,
+		.besteldTransition-enter-to {
+			opacity: 1;
+		}
 
-			h1 a {
-				text-decoration: none;
-			}
+		.router-link {
+			margin: 50px;
+		}
 
-			.router-link-active {
-				font-weight: bold;
-			}
+		h1 a {
+			text-decoration: none;
+		}
 
-			.comment {
-				margin: 1rem 0 3rem;
-			}
-		</style>
-		<script src="https://unpkg.com/vue@next"></script>
-		<script src="https://unpkg.com/vue-router@4"></script>
-		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-	</head>
+		.router-link-active {
+			font-weight: bold;
+		}
 
-	<body>
-		<div id="app">
-			<header id="main-header">
-				<h1>
-					<router-link to="/">{{titel}}</router-link>
-				</h1>
-				<h5>{{subtitel}}</h5>
-				<!-- TODO zorgen dat de home.js de winkelwagen kan tonen/verbergen -->
-				<div id="winkelwagenBox">
-					<transition name="winkelwagen">
-						<p v-if="showWinkelwagen" id="winkelwagen">Items in <router-link to="/winkelwagen">Winkelwagen </router-link>: {{aantalInWinkelwagen}}</p>
-					</transition>
-				</div>
-				<nav>
-					<router-link class="router-link" to="/">Store</router-link>
-					<router-link class="router-link" to="/winkelwagen">Winkelwagen</router-link>
-					<router-link class="router-link" to="/comments">Comments</router-link>
-				</nav>
-			</header>
-			<transition name="cookieTransition">
-				<section id="cookies" v-if="showCookieMelding">
-					<p>Deze site maakt gebruik van cookies. Door de site verder te gebruiken stem je toe met het gebruik van deze cookies.</p>
-					<input type="checkbox" v-on:change="check()" />Deze melding niet meer tonen.
-				</section>
-			</transition>
-			<router-view></router-view>
-		</div>
+		.comment {
+			margin: 1rem 0 3rem;
+		}
+	</style>
+	<script src="https://unpkg.com/vue@next"></script>
+	<script src="https://unpkg.com/vue-router@4"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
 
-		<script type="text/x-template" id="homeTemplate">
+<body>
+	<div id="app">
+		<header id="main-header">
+			<h1>
+				<router-link to="/">{{titel}}</router-link>
+			</h1>
+			<h5>{{subtitel}}</h5>
+			<!-- TODO zorgen dat de home.js de winkelwagen kan tonen/verbergen -->
+			<div id="winkelwagenBox">
+				<transition name="winkelwagen">
+					<p v-if="showWinkelwagen" id="winkelwagen">Items in <router-link to="/winkelwagen">Winkelwagen </router-link>:
+						{{aantalInWinkelwagen}}</p>
+				</transition>
+			</div>
+			<nav>
+				<router-link class="router-link" to="/">Store</router-link>
+				<router-link class="router-link" to="/winkelwagen">Winkelwagen</router-link>
+				<router-link class="router-link" to="/comments">Comments</router-link>
+			</nav>
+		</header>
+		<transition name="cookieTransition">
+			<section id="cookies" v-if="showCookieMelding">
+				<p>Deze site maakt gebruik van cookies. Door de site verder te gebruiken stem je toe met het gebruik van deze
+					cookies.</p>
+				<input type="checkbox" v-on:change="check()" />Deze melding niet meer tonen.
+			</section>
+		</transition>
+		<router-view></router-view>
+	</div>
+
+	<script type="text/x-template" id="homeTemplate">
 			<div>
 			    <section id="inhoud">
 			        <h4>Nieuwe items</h4>
@@ -250,7 +253,7 @@
 			    </section >
 			</div >
 		</script>
-		<script type="text/x-template" id="winkelwagenTemplate">
+	<script type="text/x-template" id="winkelwagenTemplate">
 			    <div>
 			        <section id="inhoud">
 			        <h4>Gekozen items</h4>
@@ -286,55 +289,64 @@
 			    </section>
 			</div>
 		</script>
-		<script type="text/x-template" id="commentsTemplate">
+	<script type="text/x-template" id="commentsTemplate">
 			<section id="inhoud" >
-				<div v-for='(comment, index) in comments' class='comment' :key="index">
-					<h1>Comment {{ comment.id }}</h1>
-					<p>Naam: {{ comment.name }}</p>
-					<p>E-mail: {{ comment.email }}</p>
-					<p>Comment: {{ comment.body }}</p>
+				<div v-if='errored'>
+					<p>
+						We're sorry, we're not able to retrieve this information at the moment, please try back later
+					</p>
+				</div>
+				<div v-else>
+					<div v-if="loading">Loading...</div>
+					<div v-for='(comment, index) in comments' class='comment' :key="index">
+						<h1>Comment {{ comment.id }}</h1>
+						<p>Naam: {{ comment.name }}</p>
+						<p>E-mail: {{ comment.email }}</p>
+						<p>Comment: {{ comment.body }}</p>
+					</div>
 				</div>
 			</section>
 		</script>
-		<script src="home.js"></script>
-		<script src="winkelwagen.js"></script>
-		<script src="comments.js"></script>
-		<script>
-			const app = {
-				data: function () {
-					return {
-						titel: "Superhero store",
-						subtitel: "Your break from the office life!",
-						aantalInWinkelwagen: 0,
-						showWinkelwagen: true,
-						showCookieMelding: false,
-					};
+	<script src="home.js"></script>
+	<script src="winkelwagen.js"></script>
+	<script src="comments.js"></script>
+	<script>
+		const app = {
+			data: function () {
+				return {
+					titel: "Superhero store",
+					subtitel: "Your break from the office life!",
+					aantalInWinkelwagen: 0,
+					showWinkelwagen: true,
+					showCookieMelding: false,
+				};
+			},
+			methods: {
+				check: function () {
+					this.showCookieMelding = false;
+					localStorage.setItem("showCookieMelding", false);
 				},
-				methods: {
-					check: function () {
-						this.showCookieMelding = false;
-						localStorage.setItem("showCookieMelding", false);
-					},
-				},
-				mounted() {
-					if (localStorage.getItem("showCookieMelding")) {
-						this.showCookieMelding = JSON.parse(localStorage.getItem("showCookieMelding"));
-					} else {
-						this.showCookieMelding = true;
-					}
-				},
-			};
+			},
+			mounted() {
+				if (localStorage.getItem("showCookieMelding")) {
+					this.showCookieMelding = JSON.parse(localStorage.getItem("showCookieMelding"));
+				} else {
+					this.showCookieMelding = true;
+				}
+			},
+		};
 
-			const router = new VueRouter.createRouter({
-				history: VueRouter.createWebHashHistory(),
-				routes: [
-					{ path: "/", name: "Home", component: home },
-					{ path: "/winkelwagen", name: "Winkelwagen", component: winkelwagen },
-					{ path: "/comments", name: "Comments", component: comments },
-				],
-			});
+		const router = new VueRouter.createRouter({
+			history: VueRouter.createWebHashHistory(),
+			routes: [
+				{ path: "/", name: "Home", component: home },
+				{ path: "/winkelwagen", name: "Winkelwagen", component: winkelwagen },
+				{ path: "/comments", name: "Comments", component: comments },
+			],
+		});
 
-			Vue.createApp(app).use(router).mount("#app");
-		</script>
-	</body>
+		Vue.createApp(app).use(router).mount("#app");
+	</script>
+</body>
+
 </html>
