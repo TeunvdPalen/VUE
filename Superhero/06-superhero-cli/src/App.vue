@@ -1,26 +1,227 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+	<header id="main-header">
+		<h1>
+			<router-link to="/">{{ titel }}</router-link>
+		</h1>
+		<h5>{{ subtitel }}</h5>
+		<!-- TODO zorgen dat de home.js de winkelwagen kan tonen/verbergen -->
+		<div id="winkelwagenBox">
+			<transition name="winkelwagen">
+				<p v-if="showWinkelwagen" id="winkelwagen">Items in <router-link to="/winkelwagen">Winkelwagen </router-link>: {{ aantalInWinkelwagen }}</p>
+			</transition>
+		</div>
+		<nav>
+			<router-link class="router-link" to="/">Store</router-link>
+			<router-link class="router-link" to="/winkelwagen">Winkelwagen</router-link>
+			<router-link class="router-link" to="/comments">Comments</router-link>
+		</nav>
+	</header>
+	<CookiemeldingComponent></CookiemeldingComponent>
+	<router-view></router-view>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import CookiemeldingComponent from './components/CookiemeldingComponent.vue';
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+	name: 'App',
+	components: {
+		CookiemeldingComponent,
+	},
+	data: function () {
+		return {
+			titel: 'Superhero store',
+			subtitel: 'Your break from the office life!',
+			aantalInWinkelwagen: 0,
+			showWinkelwagen: true,
+		};
+	},
+};
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style type="text/css">
+body,
+html {
+	font-family: verdana, sans-serif;
+	color: #666;
+	background-color: #f9f9f9;
+	margin: 0;
+}
+
+header {
+	background: #770000;
+	padding: 20px 60px;
+	margin: 0;
+	color: #ffeedd;
+	border-bottom: 1px solid #ddd;
+}
+
+a {
+	text-decoration: none;
+	color: #ffeedd;
+}
+
+#cookies,
+#inhoud {
+	padding: 20px 30px;
+}
+
+#cookies {
+	background-color: orange;
+}
+
+#nieuwe-items {
+	display: flex;
+	justify-content: space-between;
+}
+
+.winkelwagen-item {
+	border: 2px solid #ccc;
+	width: 800px;
+	background-color: #fff;
+	text-align: right;
+	margin-bottom: 50px;
+}
+
+.winkelwagen-item-img {
+	width: 100px;
+	height: 100px;
+	background-color: #ddd;
+}
+
+input {
+	font-size: 2em;
+	color: #009900;
+	margin-bottom: 25px;
+}
+
+.item {
+	border: 2px solid #ccc;
+	width: 300px;
+	background-color: #fff;
+	text-align: center;
+	height: 550px;
+}
+
+.besteld {
+	position: relative;
+	top: -250px;
+	color: white;
+	font-size: 29px;
+	background: green;
+}
+
+.item-img {
+	width: 300px;
+	height: 300px;
+	background-color: #ddd;
+}
+
+.item-img img {
+	cursor: pointer;
+}
+
+.item-body {
+	padding: 25px;
+	color: #789;
+}
+
+.item-body h4 {
+	font-weight: bold;
+	margin: 0;
+}
+
+.item-body .prijs,
+.totaal {
+	font-size: 2em;
+	color: #009900;
+	margin-bottom: 25px;
+}
+
+.knop {
+	display: inline-block;
+	text-decoration: none;
+	background-color: #009900;
+	color: #ffffff;
+	padding: 6px 10px;
+	border-radius: 6px;
+	font-size: 0.75em;
+	letter-spacing: 1px;
+}
+
+#winkelwagen {
+	text-align: right;
+}
+
+.itemTransition-leave-to {
+	transform: translateX(-500px);
+	opacity: 0;
+}
+
+.itemTransition-leave-active {
+	/* position: absolute; */
+	transition: all 1s ease;
+}
+
+.itemTransition-move {
+	transition: transform 1s;
+}
+
+.cookieTransition-leave-to {
+	transform: translateX(500px);
+	opacity: 0;
+}
+
+.winkelwagen-enter-active,
+.winkelwagen-leave-active,
+.cookieTransition-leave-active {
+	transition: all 0.3s ease;
+}
+
+.winkelwagen-enter-from,
+.winkelwagen-leave-to {
+	transform: translateX(50px);
+	opacity: 0;
+}
+
+.winkelwagen-enter-to {
+	opacity: 1;
+	transform: translateX(0px);
+}
+
+#winkelwagenBox {
+	height: 35px;
+}
+
+.knopTransition-enter-from,
+.besteldTransition-enter-from {
+	opacity: 0;
+	transform: scale(1.3) translateY(10px);
+}
+
+.knopTransition-enter-active,
+.besteldTransition-enter-active {
+	transition: all 2s;
+}
+
+.knopTransition-enter-to,
+.besteldTransition-enter-to {
+	opacity: 1;
+}
+
+.router-link {
+	margin: 50px;
+}
+
+h1 a {
+	text-decoration: none;
+}
+
+.router-link-active {
+	font-weight: bold;
+}
+
+.comment {
+	margin: 1rem 0 3rem;
 }
 </style>
